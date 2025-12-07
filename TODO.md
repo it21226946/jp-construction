@@ -1,0 +1,1 @@
+- [x] Update Header.tsx navbar styling to use semi-transparent background (rgba(255,255,255,0.85)) and backdrop blur (blur(10px)) for both scrolled and non-scrolled states
