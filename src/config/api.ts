@@ -5,7 +5,7 @@ const getApiUrl = (): string => {
   // Check if we're in production (Vite uses import.meta.env)
   if (import.meta.env.PROD) {
     // Use environment variable if set, otherwise use a default production URL
-    return import.meta.env.VITE_API_URL || 'https://your-backend-url.railway.app';
+    return import.meta.env.VITE_API_URL || 'https://jp-construction-production.up.railway.app';
   }
   
   // Development: use localhost
