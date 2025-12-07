@@ -4,16 +4,38 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME || 'jp_construction',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || '',
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-});
+// Railway provides DB_URL or DATABASE_URL as a connection string
+// Format: postgresql://user:password@host:port/database
+const dbUrl = process.env.DB_URL || process.env.DATABASE_URL;
+
+let poolConfig;
+
+if (dbUrl) {
+  // Use connection string (Railway format)
+  poolConfig = {
+    connectionString: dbUrl,
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000,
+  };
+  console.log('📦 Using database connection string (Railway format)');
+} else {
+  // Use individual environment variables
+  poolConfig = {
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 5432,
+    database: process.env.DB_NAME || 'jp_construction',
+    user: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD || '',
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000,
+  };
+  console.log('📦 Using individual database environment variables');
+}
+
+const pool = new Pool(poolConfig);
 
 // Test connection
 pool.on('connect', () => {
