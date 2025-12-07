@@ -11,15 +11,25 @@ const dbUrl = process.env.DB_URL || process.env.DATABASE_URL;
 let poolConfig;
 
 if (dbUrl) {
+  // Check if it's a Supabase connection (requires SSL)
+  const isSupabase = dbUrl.includes('supabase.co');
+  const isProduction = process.env.NODE_ENV === 'production';
+  
   // Use connection string (Railway format)
   poolConfig = {
     connectionString: dbUrl,
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+    // Supabase always requires SSL, production environments should use SSL too
+    ssl: (isSupabase || isProduction) ? { rejectUnauthorized: false } : false,
     max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
   };
-  console.log('📦 Using database connection string (Railway format)');
+  
+  if (isSupabase) {
+    console.log('📦 Using Supabase database connection (SSL enabled)');
+  } else {
+    console.log('📦 Using database connection string (Railway format)');
+  }
 } else {
   // Use individual environment variables
   poolConfig = {
