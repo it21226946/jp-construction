@@ -15,17 +15,25 @@ const transporter = nodemailer.createTransport({
 });
 
 // Verify connection configuration only if credentials are provided
+// This runs asynchronously and won't block server startup
 if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
   transporter.verify(function (error, success) {
     if (error) {
-      console.log('❌ Email configuration error:', error.message);
-      console.log('⚠️  Email notifications will be disabled. Please configure email settings in .env');
+      // Only log a brief warning, not the full error stack
+      if (error.code === 'EAUTH') {
+        console.log('⚠️  Email authentication failed. Email notifications will be disabled.');
+        console.log('📝 To fix: Use an App Password (not your regular Gmail password)');
+        console.log('   See: https://support.google.com/accounts/answer/185833');
+      } else {
+        console.log('⚠️  Email configuration error:', error.message);
+        console.log('⚠️  Email notifications will be disabled.');
+      }
     } else {
       console.log('✅ Email server is ready to send messages');
     }
   });
 } else {
-  console.log('⚠️  Email credentials not configured. Email notifications will be disabled.');
+  console.log('ℹ️  Email credentials not configured. Email notifications will be disabled.');
   console.log('📝 To enable emails, set EMAIL_USER and EMAIL_PASS in your .env file');
 }
 
@@ -126,7 +134,13 @@ ${message ? `詳細・ご要望 / Details:\n${message}` : ''}
     console.log('✅ Contact notification email sent:', info.messageId);
     return { success: true, messageId: info.messageId };
   } catch (error) {
-    console.error('❌ Error sending contact notification email:', error);
+    // Log error but don't expose full stack trace for auth errors
+    if (error.code === 'EAUTH') {
+      console.error('❌ Email authentication failed. Check your EMAIL_USER and EMAIL_PASS in .env');
+      console.error('   Tip: Gmail requires an App Password, not your regular password');
+    } else {
+      console.error('❌ Error sending contact notification email:', error.message);
+    }
     return { success: false, error: error.message };
   }
 };
