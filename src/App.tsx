@@ -10,6 +10,7 @@ const Projects = lazy(() => import('./components/Projects'));
 const About = lazy(() => import('./components/About'));
 const Contact = lazy(() => import('./components/Contact'));
 const Footer = lazy(() => import('./components/Footer'));
+const Vacancy = lazy(() => import('./components/Vacancy'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -28,6 +29,8 @@ const ErrorFallback = ({ resetErrorBoundary }: { error: Error; resetErrorBoundar
         onClick={resetErrorBoundary}
         className="bg-amber-500 text-white px-6 py-2 rounded-lg hover:bg-amber-600 transition-colors"
       >
+// sourcery skip: unused-skip-comment
+// sourcery skip: remove-redundant-boolean
         再試行 / Retry
       </button>
     </div>
@@ -41,6 +44,10 @@ function App() {
         <div className="App">
           <Header />
           <Hero />
+
+          <Suspense fallback={<LoadingSpinner />}>
+            <Vacancy />
+          </Suspense>
 
           <Suspense fallback={<LoadingSpinner />}>
             <Services />

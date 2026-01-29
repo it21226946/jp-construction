@@ -60,7 +60,7 @@ const Header: React.FC = () => {
             <div className="hidden md:flex items-center space-x-3">
               <div className="flex items-center">
                 <Clock className="h-3 w-3 mr-1 text-amber-300" aria-hidden="true" />
-                <span className="text-xs">営業時間: 8:00-18:00</span>
+                <span className="text-xs">営業時間8:00</span>
               </div>
               <div className="flex items-center">
                 <MapPin className="h-3 w-3 mr-1 text-amber-300" aria-hidden="true" />
