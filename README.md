@@ -118,33 +118,7 @@ The frontend is already configured to connect to the backend:
 - Helmet (security)
 - CORS
 
-## 📝 Configuration
 
-### Backend Environment Variables
-
-Create `backend/.env` file:
-
-```env
-PORT=5000
-NODE_ENV=development
-
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=jp_construction
-DB_USER=postgres
-DB_PASSWORD=your_password
-
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_app_password
-EMAIL_FROM=noreply@motegi-615.jp
-EMAIL_TO=mk-kaitai@motegi-615.jp
-
-FRONTEND_URL=http://localhost:5173
-```
-
-See `backend/env.template` for a template.
 
 ## 📚 Documentation
 
